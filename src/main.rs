@@ -1,21 +1,22 @@
 use anyhow::Result;
-use postgres::{fallible_iterator::FallibleIterator, Client, NoTls};
+use postgres::{Client, NoTls};
 
 /// returns (User, Password, Database)
-fn get_credentials() -> Result<(String, String, String)> {
+fn get_credentials() -> Result<[String; 4]> {
     use std::env::var;
 
-    Ok((
+    Ok([
         var("DATABASE_USER")?,
         var("DATABASE_PASSWORD")?,
         var("DATABASE_DB")?,
-    ))
+        var("DATABASE_PORT").unwrap_or("5243".to_string()),
+    ])
 }
 
 // example string:
 //  "postgresql://dboperator:operatorpass123@localhost:5243/postgres"
-fn get_config_str((user, password, database): (String, String, String)) -> String {
-    format!("postgresql://{user}:{password}@localhost:5243/{database}")
+fn get_config_str([user, password, database, port]: [String; 4]) -> String {
+    format!("postgresql://{user}:{password}@localhost:{port}/{database}")
 }
 
 fn main() {
