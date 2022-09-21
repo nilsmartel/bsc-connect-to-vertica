@@ -12,20 +12,18 @@ fn get_credentials() -> Result<(String, String, String)> {
     ))
 }
 
-fn get_config_str() -> Result<String> {
-    // example string:
-    //  "postgresql://dboperator:operatorpass123@localhost:5243/postgres"
-
-    let (user, password, database) = get_credentials()?;
-
-    Ok(format!(
-        "postgresql://{user}:{password}@localhost:5243/{database}"
-    ))
+// example string:
+//  "postgresql://dboperator:operatorpass123@localhost:5243/postgres"
+fn get_config_str((user, password, database): (String, String, String)) -> String {
+    format!("postgresql://{user}:{password}@localhost:5243/{database}")
 }
 
 fn main() {
     let mut client = {
-        let s = get_config_str().expect("to read credentials for database");
+        let s = get_credentials()
+            .map(get_config_str)
+            .expect("to read credentials for database");
+
         Client::connect(&s, NoTls).expect("to make postgres connection")
     };
 
