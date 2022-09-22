@@ -25,7 +25,13 @@ fn main() {
             .map(get_config_str)
             .expect("to read credentials for database");
 
-        Client::connect(&s, NoTls).expect("to make postgres connection")
+        match Client::connect(&s, NoTls) {
+            Ok(c) => c,
+            Err(e) => {
+                eprintln!("failed to connect to database: {e}");
+                std::process::exit(1)
+            }
+        }
     };
 
     let query = "SELECT * FROM gittables_tables_info";
