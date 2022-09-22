@@ -21,11 +21,12 @@ fn get_config_str([user, password, database, port]: [String; 4]) -> String {
 
 fn main() {
     let mut client = {
-        let s = get_credentials()
-            .map(get_config_str)
-            .expect("to read credentials for database");
+        let s = "postgresql://postgres:postgres@localhost/library";
+        // let s = get_credentials()
+        //     .map(get_config_str)
+        //     .expect("to read credentials for database");
 
-        match Client::connect(&s, NoTls) {
+        match Client::connect(s, NoTls) {
             Ok(c) => c,
             Err(e) => {
                 eprintln!("failed to connect to database: {e}");
