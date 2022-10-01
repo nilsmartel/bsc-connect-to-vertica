@@ -1,5 +1,5 @@
 [package]
-name = "bsc-connect-to-vertica"
+name = "bsc-table-to-file"
 version = "0.1.0"
 edition = "2021"
 
@@ -8,3 +8,5 @@ edition = "2021"
 [dependencies]
 postgres = "0.19.4"                         # A native, synchronous PostgreSQL client
 anyhow = "1.0.65"                                   # Flexible concrete Error type built on std::error::Error
+fast-smaz = "0.1.0"    # Pure Rust SMAZ compression implementation
+varint-compression = "0.1.0"    # variable length integer compression
